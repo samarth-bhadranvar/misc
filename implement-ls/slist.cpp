@@ -17,13 +17,11 @@ class file
 
 public:
 char* perm ;
-//string perm;
 int links;
 int uid;
 int gid;
 int size;
 char* time;
-// char* name;
 string name;
 
 bool operator <(const file & fileObject) const
@@ -31,12 +29,6 @@ bool operator <(const file & fileObject) const
 		return size < fileObject.size;
 	}
 
-
-
-// string printr()
-// {
-// return perm+" "+links+" "+uid+" "+gid+" "+size+" "+time+" "+name+"\n";
-// }
 
 };
 
@@ -74,6 +66,8 @@ struct tm* time;
 char timebuffer [100];
 char permissions[10];
 
+
+//location of directory is hard coded
 dir= opendir("/home/cs104/cpp");
 
 list<file> fileList;
@@ -81,15 +75,15 @@ list<file> fileList;
 while((ptr = readdir(dir))!=NULL)
 {
 
-// -rwxrwxr-x 1 cs104 cs104 24640 Mar 19 18:33 a.out
-
-
+//Extracting the stat info of the file
 stat(ptr->d_name,&buf);
 
 time=localtime(&buf.st_mtime);
 
+//Formatting the time into readable format
 strftime(timebuffer,100,"%b %y %R",time);
 
+//Formatting the premissions into UNIX format
 strmode(buf.st_mode,permissions);
 
 file finfo;
@@ -103,10 +97,6 @@ finfo.name=ptr->d_name;
 
 fileList.push_back(finfo);
 
-
-
-//cout<<permissions<<" "<<buf.st_nlink<<" "<<buf.st_uid<<" "<<buf.st_gid<<" "<<buf.st_size<<" "<<timebuffer<<" "<<ptr->d_name<<"\n";
-
 }
 
 
@@ -116,10 +106,7 @@ fileList.push_back(finfo);
 fileList.sort(fileComparator());
  
 
-
-
 for (list<file>::iterator it = fileList.begin(); it != fileList.end(); ++it){
-	//cout << it->size;
 	cout<<it->perm<<" "<<it->links<<" "<<it->uid<<" "<<it->gid<<" "<<it->size<<" "<<it->time<<" "<<it->name<<"\n";
 }
 
